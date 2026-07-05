@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "gen-og": "node scripts/gen-og.mjs",
-    "build": "node scripts/gen-og.mjs && tsc -b && vite build",
+    "gen-avatar": "node scripts/gen-avatar.mjs",
+    "build": "node scripts/gen-og.mjs && node scripts/gen-avatar.mjs && tsc -b && vite build",
     "deploy": "npm run build && wrangler deploy",
     "preview": "vite preview"
   },
