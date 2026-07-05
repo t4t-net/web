@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- trans flag stripes (126px each = 630px total) -->
+  <rect width="1200" height="126" y="0"   fill="#5BCEFA"/>
+  <rect width="1200" height="126" y="126" fill="#F5A9B8"/>
+  <rect width="1200" height="126" y="252" fill="#FFFFFF"/>
+  <rect width="1200" height="126" y="378" fill="#F5A9B8"/>
+  <rect width="1200" height="126" y="504" fill="#5BCEFA"/>
+  <!-- terminal-style dark overlay -->
+  <rect x="60" y="170" width="1080" height="290" fill="#040c12" rx="6" opacity="0.93"/>
+  <!-- text -->
+  <text x="600" y="308" font-family="monospace" font-size="112" font-weight="700" fill="#5BCEFA" text-anchor="middle">t4t.net</text>
+  <text x="600" y="398" font-family="monospace" font-size="34" fill="#F5A9B8" text-anchor="middle">for trans people, by trans people // AS395388</text>
+</svg>
