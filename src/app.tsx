@@ -200,6 +200,11 @@ export function App() {
                     <td className="py-2"><a href="https://lg.t4t.net" className={`${currentTheme.text} hover:underline`}>lg.t4t.net</a></td>
                   </tr>
                   <tr>
+                    <td className="py-2 text-white font-semibold">Status Page</td>
+                    <td className="py-2 text-slate-400">Everything at a glance</td>
+                    <td className="py-2"><a href="https://status.t4t.net" className={`${currentTheme.text} hover:underline`}>status.t4t.net</a></td>
+                  </tr>
+                  <tr>
                     <td className="py-2 text-white font-semibold">Certificate Authority</td>
                     <td className="py-2 text-slate-400">Internal PKI & TLS certificates</td>
                     <td className="py-2"><a href="https://ca.t4t.net" className={`${currentTheme.text} hover:underline`}>ca.t4t.net</a></td>
