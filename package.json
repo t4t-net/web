@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "gen-og": "node scripts/gen-og.mjs",
+    "build": "node scripts/gen-og.mjs && tsc -b && vite build",
     "deploy": "npm run build && wrangler deploy",
     "preview": "vite preview"
   },
@@ -16,8 +17,13 @@
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.10.1",
+    "sharp": "^0.35.3",
     "typescript": "~5.7.2",
     "vite": "^6.3.1",
     "wrangler": "^4.13.0"
+  },
+  "allowScripts": {
+    "sharp@0.35.3": true,
+    "sharp@0.33.5": true
   }
 }
