@@ -1,10 +1,39 @@
-import { useState } from 'preact/hooks'
-import { TransFlag } from './TransFlag'
+import { useEffect, useRef, useState } from 'preact/hooks'
+import { TransFlag, FLAG_COLORS } from './TransFlag'
+
+function useFaviconFlag(theme: string) {
+  const colorsRef = useRef(FLAG_COLORS[theme] ?? FLAG_COLORS.trans)
+  useEffect(() => { colorsRef.current = FLAG_COLORS[theme] ?? FLAG_COLORS.trans }, [theme])
+  useEffect(() => {
+    const W = 32, H = 32, ROWS = 5, AMP = 2, FREQ = 0.375, SPEED = 2.5
+    const canvas = document.createElement('canvas')
+    canvas.width = W; canvas.height = H
+    const ctx = canvas.getContext('2d')!
+    const link = document.createElement('link')
+    link.rel = 'icon'; link.type = 'image/png'
+    document.head.appendChild(link)
+    let t = 0
+    const id = setInterval(() => {
+      const colors = colorsRef.current
+      for (let py = 0; py < H; py++)
+        for (let px = 0; px < W; px++) {
+          const disp = AMP * (px / (W - 1)) * Math.sin(FREQ * px - SPEED * t)
+          const idx = Math.max(0, Math.min(4, Math.floor(py / H * ROWS - disp)))
+          ctx.fillStyle = colors[idx]
+          ctx.fillRect(px, py, 1, 1)
+        }
+      link.href = canvas.toDataURL()
+      t += 0.05
+    }, 50)
+    return () => { clearInterval(id); link.remove() }
+  }, [])
+}
 
 type Theme = 'trans' | 'lesbian' | 'bisexual' | 'nonbinary'
 
 export function App() {
   const [theme, setTheme] = useState<Theme>('trans')
+  useFaviconFlag(theme)
 
   const themeClasses = {
     trans: {

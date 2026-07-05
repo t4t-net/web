@@ -7,7 +7,7 @@ const RENDER_ROWS = FLAG_ROWS + MAX_AMP
 const FREQ = 0.6
 const SPEED = 2.5
 
-const FLAG_COLORS: Record<string, string[]> = {
+export const FLAG_COLORS: Record<string, string[]> = {
   trans:    ['#5BCEFA', '#F5A9B8', '#FFFFFF', '#F5A9B8', '#5BCEFA'],
   lesbian:  ['#D62900', '#FF9B55', '#FFFFFF', '#D461A6', '#A50062'],
   bisexual: ['#D60270', '#D60270', '#9B4F96', '#0038A8', '#0038A8'],
