@@ -1,14 +1,27 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 
-const MAX_FLAG_COLS = 24
+// 10 rows of 1em vs cells ~0.6em wide: 28 cols lands near the real 5:3 ratio
+const MAX_FLAG_COLS = 28
 const FLAG_ROWS = 10
 const MAX_AMP = 2
 const RENDER_ROWS = FLAG_ROWS + MAX_AMP
 const FREQ = 0.6
 const SPEED = 2.5
+const POLE_CHARS = 2
 
-function colsFromWidth(w: number) {
-  return Math.max(10, Math.min(MAX_FLAG_COLS, Math.round(w / 18)))
+function colsFromWidth(w: number, charW: number) {
+  return Math.max(10, Math.min(MAX_FLAG_COLS, Math.floor(w / charW) - POLE_CHARS))
+}
+
+// measure a real █ in the inherited font instead of guessing its width
+function measureCharWidth(el: HTMLElement) {
+  const probe = document.createElement('span')
+  probe.textContent = '█'.repeat(10)
+  probe.style.cssText = 'position:absolute;visibility:hidden;white-space:pre'
+  el.appendChild(probe)
+  const w = probe.getBoundingClientRect().width / 10
+  probe.remove()
+  return w || 9
 }
 
 function useResponsiveCols() {
@@ -16,9 +29,11 @@ function useResponsiveCols() {
   const [cols, setCols] = useState(MAX_FLAG_COLS)
 
   useEffect(() => {
-    const parent = ref.current?.parentElement
-    if (!parent) return
-    const update = (w: number) => setCols(colsFromWidth(w))
+    const el = ref.current
+    const parent = el?.parentElement
+    if (!el || !parent) return
+    const charW = measureCharWidth(el)
+    const update = (w: number) => setCols(colsFromWidth(w, charW))
     update(parent.getBoundingClientRect().width)
     const obs = new ResizeObserver(entries => update(entries[0].contentRect.width))
     obs.observe(parent)
