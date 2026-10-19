@@ -1,61 +1,86 @@
-@import "tailwindcss";
-
 :root {
-  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  line-height: 1.5;
-  font-weight: 400;
-  background-color: #0c0f12;
-  color: #d1d5db;
+  --bg: #040c12; --fg: #5BCEFA; --alt: #F5A9B8;
+  --text: #d6d3cf;
+  --mute: color-mix(in srgb, var(--text) 50%, var(--bg));
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+}
+[data-theme="lesbian"]   { --bg: #120608; --fg: #FF9B55; --alt: #D461A6; }
+[data-theme="bisexual"]  { --bg: #0d0408; --fg: #D60270; --alt: #9B4F96; }
+[data-theme="nonbinary"] { --bg: #0c0b04; --fg: #FCF434; --alt: #9C59D1; }
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); }
+::selection { background: var(--fg); color: var(--bg); }
+
+main {
+  max-width: 72ch;
+  margin: 0 auto;
+  padding: 3rem 16px 2rem;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #0c0f12;
-  color: #d1d5db;
-  min-height: 100vh;
-}
+a { color: var(--fg); text-underline-offset: 2px; }
+a:hover { color: var(--alt); }
 
-#app {
-  width: 100%;
-  min-height: 100vh;
+header {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 2.5rem;
+  margin-bottom: 2.5rem;
+}
+header .flag { flex: 1 1 18rem; max-width: 28rem; }
+h1 { margin: 0 0 .5rem; font-size: 1.6rem; color: var(--fg); }
+
+h2 {
+  display: flex;
+  align-items: center;
+  gap: 1ch;
+  margin: 2.5rem 0 1rem;
+  font-size: 1rem;
+  color: var(--alt);
+}
+h2::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px dashed currentColor;
+  opacity: .4;
 }
 
-/* Custom glow effect and styling for terminal look */
-.terminal-glow {
-  text-shadow: 0 0 4px rgba(34, 197, 94, 0.2);
-}
+p { margin: 0 0 1em; }
 
-.terminal-glow-amber {
-  text-shadow: 0 0 4px rgba(245, 158, 11, 0.2);
-}
+dl { display: grid; grid-template-columns: max-content 1fr; gap: 0 2ch; margin: 0; }
+dd { margin: 0; }
+.facts dt { color: var(--alt); }
+.kv dd { color: var(--mute); }
 
-/* Blinking cursor animation */
-@keyframes blink {
-  50% { opacity: 0; }
+pre {
+  margin: 0;
+  font: inherit;
+  overflow-x: auto;
 }
+pre .c { color: var(--mute); }
 
-.cursor-blink {
-  animation: blink 1s step-start infinite;
+footer {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--text) 20%, transparent);
+  color: var(--mute);
+  font-size: .85rem;
 }
-
-/* Custom scrollbar for terminal feel */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+.themes { display: flex; flex-wrap: wrap; gap: 0 2ch; margin-bottom: .5rem; }
+.themes button {
+  font: inherit;
+  color: var(--mute);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
 }
-
-::-webkit-scrollbar-track {
-  background: #111827;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #374151;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #4b5563;
-}
+.themes button:hover { color: var(--alt); }
+.themes button[aria-pressed="true"] { color: var(--fg); }
+.themes button[aria-pressed="true"]::before { content: '['; }
+.themes button[aria-pressed="true"]::after { content: ']'; }

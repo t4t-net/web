@@ -65,7 +65,7 @@ export function TransFlag({ theme }: Props) {
   }
 
   return (
-    <div ref={ref} className="font-mono select-none" style={{ lineHeight: '1em' }}>
+    <div ref={ref} style={{ lineHeight: '1em', userSelect: 'none' }}>
       {rows.map((row, r) => (
         <div key={r} style={{ display: 'flex' }}>
           <span style={{ color: '#555' }}>||</span>

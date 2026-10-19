@@ -30,289 +30,95 @@ function useFaviconFlag(theme: string) {
 }
 
 type Theme = 'trans' | 'lesbian' | 'bisexual' | 'nonbinary'
+const THEMES: Theme[] = ['trans', 'lesbian', 'bisexual', 'nonbinary']
 
 export function App() {
   const [theme, setTheme] = useState<Theme>('trans')
   useFaviconFlag(theme)
-
-  const themeClasses = {
-    trans: {
-      bg: 'bg-[#040c12]',
-      border: 'border-[#5BCEFA]/20',
-      text: 'text-[#5BCEFA]',
-      textDim: 'text-[#F5A9B8]/80',
-      textMuted: 'text-[#5BCEFA]/20',
-      accentBg: 'bg-[#5BCEFA]/5',
-      buttonActive: 'bg-[#5BCEFA]/20 text-[#5BCEFA] border-[#5BCEFA]/60',
-      buttonHover: 'hover:bg-[#F5A9B8]/10 hover:text-[#F5A9B8]',
-      glow: 'shadow-[0_0_15px_rgba(91,206,250,0.08)]'
-    },
-    lesbian: {
-      bg: 'bg-[#120608]',
-      border: 'border-[#FF9B55]/20',
-      text: 'text-[#FF9B55]',
-      textDim: 'text-[#D461A6]/80',
-      textMuted: 'text-[#FF9B55]/20',
-      accentBg: 'bg-[#D62900]/5',
-      buttonActive: 'bg-[#FF9B55]/20 text-[#FF9B55] border-[#FF9B55]/60',
-      buttonHover: 'hover:bg-[#D461A6]/10 hover:text-[#D461A6]',
-      glow: 'shadow-[0_0_15px_rgba(255,155,85,0.08)]'
-    },
-    bisexual: {
-      bg: 'bg-[#0d0408]',
-      border: 'border-[#9B4F96]/25',
-      text: 'text-[#D60270]',
-      textDim: 'text-[#9B4F96]/80',
-      textMuted: 'text-[#9B4F96]/25',
-      accentBg: 'bg-[#D60270]/5',
-      buttonActive: 'bg-[#D60270]/20 text-[#D60270] border-[#D60270]/60',
-      buttonHover: 'hover:bg-[#9B4F96]/10 hover:text-[#9B4F96]',
-      glow: 'shadow-[0_0_15px_rgba(214,2,112,0.08)]'
-    },
-    nonbinary: {
-      bg: 'bg-[#0c0b04]',
-      border: 'border-[#FCF434]/15',
-      text: 'text-[#FCF434]',
-      textDim: 'text-[#9C59D1]/80',
-      textMuted: 'text-[#FCF434]/15',
-      accentBg: 'bg-[#FCF434]/5',
-      buttonActive: 'bg-[#FCF434]/15 text-[#FCF434] border-[#FCF434]/50',
-      buttonHover: 'hover:bg-[#9C59D1]/10 hover:text-[#9C59D1]',
-      glow: 'shadow-[0_0_15px_rgba(252,244,52,0.06)]'
-    }
-  }
-
-  const currentTheme = themeClasses[theme]
+  useEffect(() => { document.documentElement.dataset.theme = theme }, [theme])
 
   return (
-    <main className="flex-1 flex items-center justify-center p-3 sm:p-6 md:p-12 w-full max-w-5xl mx-auto">
-      {/* Terminal Window Shell */}
-      <div className={`w-full rounded-lg border ${currentTheme.border} ${currentTheme.bg} ${currentTheme.glow} flex flex-col overflow-hidden transition-all duration-300`}>
-        
-        {/* Terminal Header */}
-        <div className={`flex items-center justify-between px-4 py-2 border-b ${currentTheme.border} bg-black/40`}>
-          <div className="flex items-center space-x-2">
-            {/* Window control dots */}
-            <span className={`ml-2 text-xs font-mono select-none ${currentTheme.textDim}`}>
-              noc@t4t.net $ <span className="text-white">ssh root@ghostholding.sea.t4t.net</span>
-            </span>
-          </div>
+    <main>
+      <header>
+        <div className="flag"><TransFlag theme={theme} /></div>
+        <div>
+          <h1>t4t.net</h1>
+          <dl className="facts">
+            <dt>asn</dt><dd>AS395388</dd>
+            <dt>host</dt><dd>ghostholding.sea.t4t.net</dd>
+            <dt>os</dt><dd>NixOS 26.05</dd>
+            <dt>where</dt><dd>KOMO Plaza, Seattle</dd>
+            <dt>pronouns</dt><dd>it/its</dd>
+          </dl>
         </div>
+      </header>
 
-        {/* Terminal Content Body */}
-        <div className="p-4 sm:p-6 md:p-8 space-y-8 font-mono text-sm leading-relaxed overflow-x-auto">
-          
-          {/* ASCII Banner & Neofetch Panel */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-            
-            {/* Animated Trans Flag */}
-            <div className="md:col-span-6 py-2 flex justify-center md:justify-start">
-              <TransFlag theme={theme} />
-            </div>
+      <section>
+        <p>
+          t4t.net is an experimental autonomous system for trans people, by
+          trans people. we use it for BGP routing experiments and general
+          network research.
+        </p>
+        <p>
+          we run compute &amp; networking out of KOMO Plaza in Seattle on a
+          best-effort basis. nothing here is guaranteed to stay up, and no,
+          i will never sign an SLA. this is a side project, not a job.
+        </p>
+        <p>
+          the whole fleet runs <a href="https://nixos.org/">NixOS</a>,
+          including our Mellanox switch, and we don't plan on supporting
+          anything else. sorry.
+        </p>
+      </section>
 
-            {/* Router Status Info Block */}
-            <div className="md:col-span-6 space-y-1">
-              <div>
-                <span className={`${currentTheme.text}`}>root@ghostholding.sea.t4t.net</span>
-                <span className={`${currentTheme.textDim}`}>:</span>
-                <span className={`${currentTheme.text}`}>~$ </span>
-                <span className="text-white">hostinfo</span>
-              </div>
-              <div className={`h-px w-full ${currentTheme.border} bg-current opacity-20 my-1`} />
-              <div className="grid grid-cols-3 gap-x-2 text-xs sm:text-sm">
-                <span className={`${currentTheme.textDim}`}>Hostname:</span>
-                <span className="col-span-2 text-white font-medium">ghostholding.sea.t4t.net</span>
+      <section>
+        <h2>routing</h2>
+        <pre>{
+`aut-num:    AS395388
+as-name:    T4T-NET
+descr:      for trans people, by trans people
+member-of:  AS-TRANSGENDER
+import:     from `}<a href="https://bgp.tools/as/26073">AS26073</a>{` accept ANY   `}<span className="c"># cofractal, transit</span>{`
+export:     to AS26073 announce AS395388
+remarks:    geofeed `}<a href="https://t4t.net/geofeed.csv">https://t4t.net/geofeed.csv</a>{`
 
-                <span className={`${currentTheme.textDim}`}>ASN:</span>
-                <span className="col-span-2 text-white font-medium">AS395388</span>
+route:      23.190.72.0/24
+origin:     AS395388
 
-                <span className={`${currentTheme.textDim}`}>OS:</span>
-                <span className="col-span-2 text-white">NixOS 26.05</span>
+route6:     2620:c2:2000::/48
+origin:     AS395388`
+        }</pre>
+      </section>
 
-                <span className={`${currentTheme.textDim}`}>Location:</span>
-                <span className="col-span-2 text-white">Seattle, WA (KOMO Plaza)</span>
+      <section>
+        <h2>services</h2>
+        <dl className="kv">
+          <dt><a href="https://lg.t4t.net">lg.t4t.net</a></dt><dd>looking glass</dd>
+          <dt><a href="https://status.t4t.net">status.t4t.net</a></dt><dd>is it up? probably</dd>
+          <dt><a href="https://ca.t4t.net">ca.t4t.net</a></dt><dd>internal PKI &amp; TLS certs</dd>
+          <dt><a href="https://bao.t4t.net:8200">bao.t4t.net</a></dt><dd>OpenBao, secrets</dd>
+        </dl>
+      </section>
 
-                <span className={`${currentTheme.textDim}`}>Pronouns:</span>
-                <span className="col-span-2 text-white">it/its</span>
-              </div>
-            </div>
-          </div>
-          {/* Section: Network Activities */}
-          <div className="space-y-3">
-            <div className="flex items-center space-x-2">
-              <span className={`${currentTheme.textDim}`}>[01]</span>
-              <h2 className={`text-base font-bold uppercase tracking-wider ${currentTheme.text}`}>NETWORK ACTIVITIES & PURPOSE</h2>
-            </div>
-            <div className={`border ${currentTheme.border} ${currentTheme.accentBg} py-2 px-4 rounded text-xs sm:text-sm text-slate-300 space-y-2`}>
-              <p>
-                <a href="https://t4t.net" className={`${currentTheme.text} font-semibold`}>t4t.net</a> operates as an experimental autonomous system designed to facilitate network research & BGP routing experiments, for trans people, by trans people.
-              </p>
-              <p>
-                We offer compute & networking services on a best-effort basis via our presence in KOMO Plaza in Seattle. 
-                No guarantees are ever made on the reliability of our services (and no, I will never sign an SLA). This is a side-project, and not a full-time job.
-              </p>
-              <p>
-                Our whole fleet runs <a href="https://nixos.org/" className={`${currentTheme.text} hover:underline`}>NixOS</a> (including our Mellanox network switch!), and we do not plan on supporting other operating systems. Sorry.
-              </p>
-            </div>
-          </div>
+      <section>
+        <h2>noc</h2>
+        <dl className="kv">
+          <dt>email</dt><dd><a href="mailto:noc@t4t.net">noc@t4t.net</a></dd>
+          <dt>abuse</dt><dd><a href="mailto:abuse@t4t.net">abuse@t4t.net</a></dd>
+          <dt>hours</dt><dd>9am to 5pm pacific, give or take</dd>
+        </dl>
+      </section>
 
-          {/* Section: IP Prefixes */}
-          <div className="space-y-3">
-            <div className="flex items-center space-x-2">
-              <span className={`${currentTheme.textDim}`}>[02]</span>
-              <h2 className={`text-base font-bold uppercase tracking-wider ${currentTheme.text}`}>ADVERTISED PREFIXES</h2>
-            </div>
-            <div className={`border ${currentTheme.border} ${currentTheme.accentBg} pt-2 px-4 rounded overflow-x-auto`}>
-              <table className="w-full text-left text-xs sm:text-sm">
-                <thead>
-                  <tr className={`border-b ${currentTheme.border} opacity-80 pb-2`}>
-                    <th className={`pb-2 ${currentTheme.textDim} font-medium`}>Prefix</th>
-                    <th className={`pb-2 ${currentTheme.textDim} font-medium`}>Type</th>
-                    <th className={`pb-2 ${currentTheme.textDim} font-medium hidden sm:table-cell`}>RIR</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/5">
-                  <tr>
-                    <td className="py-2 text-white font-semibold">23.190.72.0/24</td>
-                    <td className="py-2 text-slate-400">IPv4</td>
-                    <td className="py-2 text-slate-400 hidden sm:table-cell">ARIN</td>
-                  </tr>
-                  <tr>
-                    <td className="py-2 text-white font-semibold">2620:c2:2000::/48</td>
-                    <td className="py-2 text-slate-400">IPv6</td>
-                    <td className="py-2 text-slate-400 hidden sm:table-cell">ARIN</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Section: BGP Peering Sessions */}
-          <div className="space-y-3">
-            <div className="flex items-center space-x-2">
-              <span className={`${currentTheme.textDim}`}>[03]</span>
-              <h2 className={`text-base font-bold uppercase tracking-wider ${currentTheme.text}`}>BGP PEERS</h2>
-            </div>
-            <div className={`border ${currentTheme.border} ${currentTheme.accentBg} pt-2 px-4 rounded overflow-x-auto`}>
-              <table className="w-full text-left text-xs sm:text-sm">
-                <thead>
-                  <tr className={`border-b ${currentTheme.border} opacity-80 pb-2`}>
-                    <th className={`pb-2 ${currentTheme.textDim} font-medium`}>Peer</th>
-                    <th className={`pb-2 ${currentTheme.textDim} font-medium`}>ASN</th>
-                    <th className={`pb-2 ${currentTheme.textDim} font-medium hidden sm:table-cell`}>Type</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/5">
-                  <tr>
-                    <td className="py-2 text-white font-semibold">Cofractal</td>
-                    <td className="py-2 text-slate-300 hover:underline"><a href="https://bgp.tools/as/26073" className={`${currentTheme.text} hover:underline`}>AS26073</a></td>
-                    <td className="py-2 text-slate-400 hidden sm:table-cell">Transit (IPv4 + IPv6)</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Section: Services */}
-          <div className="space-y-3">
-            <div className="flex items-center space-x-2">
-              <span className={`${currentTheme.textDim}`}>[04]</span>
-              <h2 className={`text-base font-bold uppercase tracking-wider ${currentTheme.text}`}>SERVICES</h2>
-            </div>
-            <div className={`border ${currentTheme.border} ${currentTheme.accentBg} pt-2 px-4 rounded overflow-x-auto`}>
-              <table className="w-full text-left text-xs sm:text-sm">
-                <thead>
-                  <tr className={`border-b ${currentTheme.border} opacity-80 pb-2`}>
-                    <th className={`pb-2 ${currentTheme.textDim} font-medium`}>Service</th>
-                    <th className={`pb-2 ${currentTheme.textDim} font-medium hidden sm:table-cell`}>Description</th>
-                    <th className={`pb-2 ${currentTheme.textDim} font-medium`}>URL</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/5">
-                  <tr>
-                    <td className="py-2 text-white font-semibold">Looking Glass</td>
-                    <td className="py-2 text-slate-400 hidden sm:table-cell">BGP routing information</td>
-                    <td className="py-2"><a href="https://lg.t4t.net" className={`${currentTheme.text} hover:underline`}>lg.t4t.net</a></td>
-                  </tr>
-                  <tr>
-                    <td className="py-2 text-white font-semibold">Status Page</td>
-                    <td className="py-2 text-slate-400 hidden sm:table-cell">Everything at a glance</td>
-                    <td className="py-2"><a href="https://status.t4t.net" className={`${currentTheme.text} hover:underline`}>status.t4t.net</a></td>
-                  </tr>
-                  <tr>
-                    <td className="py-2 text-white font-semibold">Certificate Authority</td>
-                    <td className="py-2 text-slate-400 hidden sm:table-cell">Internal PKI & TLS certificates</td>
-                    <td className="py-2"><a href="https://ca.t4t.net" className={`${currentTheme.text} hover:underline`}>ca.t4t.net</a></td>
-                  </tr>
-                  <tr>
-                    <td className="py-2 text-white font-semibold">OpenBao</td>
-                    <td className="py-2 text-slate-400 hidden sm:table-cell">Secret management</td>
-                    <td className="py-2"><a href="https://bao.t4t.net:8200" className={`${currentTheme.text} hover:underline`}>bao.t4t.net</a></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Section: Contact & NOC */}
-          <div className="space-y-3">
-            <div className="flex items-center space-x-2">
-              <span className={`${currentTheme.textDim}`}>[05]</span>
-              <h2 className={`text-base font-bold uppercase tracking-wider ${currentTheme.text}`}>NETWORK OPERATIONS CENTER (NOC)</h2>
-            </div>
-            <div className={`border ${currentTheme.border} ${currentTheme.accentBg} py-2 px-4 rounded`}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
-                <div className="space-y-1">
-                  <div className="flex space-x-2">
-                    <span className={`${currentTheme.textDim}`}>NOC Hours:</span>
-                    <span className="text-white">9:00 AM - 5:00 PM PST</span>
-                  </div>
-                  <div className="flex space-x-2">
-                    <span className={`${currentTheme.textDim}`}>NOC Email:</span>
-                    <a href="mailto:noc@t4t.net" className="text-white hover:underline">noc@t4t.net</a>
-                  </div>
-                  <div className="flex space-x-2">
-                    <span className={`${currentTheme.textDim}`}>Abuse Contact:</span>
-                    <a href="mailto:abuse@t4t.net" className="text-white hover:underline">abuse@t4t.net</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      <footer>
+        <div className="themes">
+          {THEMES.map(t => (
+            <button key={t} aria-pressed={theme === t} onClick={() => setTheme(t)}>{t}</button>
+          ))}
         </div>
-
-        {/* Terminal Footer with theme toggle control */}
-        <div className={`flex flex-col sm:flex-row items-center justify-between px-4 py-3 border-t ${currentTheme.border} bg-black/60 gap-3`}>
-          <div className="flex items-center space-x-2 text-xs">
-            <span className={`${currentTheme.textMuted} mr-1`}>THEME:</span>
-            {(['trans', 'lesbian', 'bisexual', 'nonbinary'] as Theme[]).map((t) => (
-              <button
-                key={t}
-                onClick={() => setTheme(t)}
-                className={`px-2 py-0.5 rounded border text-[10px] uppercase font-bold transition-all duration-150 ${
-                  theme === t
-                    ? currentTheme.buttonActive
-                    : `border-transparent ${currentTheme.textDim} ${currentTheme.buttonHover}`
-                }`}
-              >
-                {t}
-              </button>
-            ))}
-          </div>
-          <div className={`text-[10px] font-mono ${currentTheme.textDim}`}>
-            a project by{' '}
-            <a
-              href="https://bsky.app/profile/catmod.ing"
-              className={`${currentTheme.text} hover:underline`}
-            >
-              @catmod.ing
-            </a>
-            {' '}&amp; luna the trans puppygirl
-          </div>
-        </div>
-
-      </div>
+        <p>
+          made by <a href="https://bsky.app/profile/catmod.ing">@catmod.ing</a> &amp; luna the trans puppygirl
+        </p>
+      </footer>
     </main>
   )
 }
