@@ -17,9 +17,41 @@ body { margin: 0; background: var(--bg); }
 ::selection { background: var(--fg); color: var(--bg); }
 
 main {
-  max-width: 72ch;
+  max-width: 80ch;
   margin: 0 auto;
-  padding: 3rem 16px 2rem;
+  padding: 2rem 16px;
+}
+
+/* sparkle border: edges are absolutely placed rows/cols of 1ch cells */
+.frame {
+  position: relative;
+  padding: 2.5em 4ch;
+}
+.edge {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+.edge span { display: inline-block; width: 1ch; height: 1em; text-align: center; }
+.edge.top    { top: 0; left: 0; right: 0; }
+.edge.bottom { bottom: 0; left: 0; right: 0; }
+.edge.left, .edge.right { top: 1em; bottom: 1em; flex-direction: column; }
+.edge.left  { left: 0; }
+.edge.right { right: 0; }
+.edge .dot    { color: color-mix(in srgb, var(--text) 25%, var(--bg)); }
+.edge .spark  { color: var(--fg); }
+.edge .alt    { color: var(--alt); }
+.edge .corner { color: var(--fg); }
+.edge .trail  { white-space: nowrap; color: var(--fg); }
+.edge .trail.alt { color: var(--alt); }
+.edge .mascot { color: var(--text); }
+
+@media (max-width: 480px) {
+  main { padding: 1rem 8px; }
+  .frame { padding: 2em 2.5ch; }
 }
 
 a { color: var(--fg); text-underline-offset: 2px; }

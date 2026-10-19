@@ -13,10 +13,10 @@ function colsFromWidth(w: number, charW: number) {
   return Math.max(10, Math.min(MAX_FLAG_COLS, Math.floor(w / charW) - POLE_CHARS))
 }
 
-// measure a real █ in the inherited font instead of guessing its width
-function measureCharWidth(el: HTMLElement) {
+// measure a real glyph in the inherited font instead of guessing its width
+export function measureCharWidth(el: HTMLElement, glyph = '█') {
   const probe = document.createElement('span')
-  probe.textContent = '█'.repeat(10)
+  probe.textContent = glyph.repeat(10)
   probe.style.cssText = 'position:absolute;visibility:hidden;white-space:pre'
   el.appendChild(probe)
   const w = probe.getBoundingClientRect().width / 10
