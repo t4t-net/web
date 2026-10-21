@@ -54,6 +54,10 @@ main {
   .frame { padding: 2em 2.5ch; }
 }
 
+/* ascii starfield behind everything; the frame gets a solid bg so stars never cross the text */
+.starfield { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+.frame { background: var(--bg); }
+
 /* kaomoji rain: fills the empty side gutters on wide screens */
 .rain { position: fixed; inset: 0; pointer-events: none; user-select: none; z-index: 0; }
 .gutter {

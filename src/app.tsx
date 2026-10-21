@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import { TransFlag, FLAG_COLORS } from './TransFlag'
 import { SparkleFrame } from './Sparkles'
 import { KaomojiRain } from './KaomojiRain'
+import { Starfield } from './Starfield'
 
 function useFaviconFlag(theme: string) {
   const colorsRef = useRef(FLAG_COLORS[theme] ?? FLAG_COLORS.trans)
@@ -85,6 +86,7 @@ export function App() {
 
   return (
     <>
+    <Starfield theme={theme} />
     <KaomojiRain theme={theme} />
     <main>
       <SparkleFrame>
