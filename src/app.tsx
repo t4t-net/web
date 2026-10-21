@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { TransFlag, FLAG_COLORS } from './TransFlag'
 import { SparkleFrame } from './Sparkles'
+import { KaomojiRain } from './KaomojiRain'
 
 function useFaviconFlag(theme: string) {
   const colorsRef = useRef(FLAG_COLORS[theme] ?? FLAG_COLORS.trans)
@@ -39,6 +40,8 @@ export function App() {
   useEffect(() => { document.documentElement.dataset.theme = theme }, [theme])
 
   return (
+    <>
+    <KaomojiRain theme={theme} />
     <main>
       <SparkleFrame>
         <header>
@@ -126,5 +129,6 @@ origin:     AS395388`
         </footer>
       </SparkleFrame>
     </main>
+    </>
   )
 }

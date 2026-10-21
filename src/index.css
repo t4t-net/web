@@ -54,6 +54,41 @@ main {
   .frame { padding: 2em 2.5ch; }
 }
 
+/* kaomoji rain: fills the empty side gutters on wide screens */
+.rain { position: fixed; inset: 0; pointer-events: none; user-select: none; z-index: 0; }
+.gutter {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: calc((100vw - 80ch) / 2 - 2ch);
+  overflow: hidden;
+}
+.gutter.left  { left: 0; }
+.gutter.right { right: 0; }
+.lane { position: absolute; top: 0; bottom: 0; }
+.faller {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  white-space: nowrap;
+  animation: fall linear infinite;
+}
+.trail-row { animation: wiggle .5s steps(1) infinite; }
+.trail-row:nth-child(even) { animation-delay: -.25s; } /* opposite phase = nyan zigzag */
+.face { margin-top: .3em; color: var(--text); }
+@keyframes fall {
+  from { transform: translateY(-100%); }
+  to   { transform: translateY(100vh); }
+}
+@keyframes wiggle {
+  0%, 100% { transform: translateX(-.5ch); }
+  50%      { transform: translateX(.5ch); }
+}
+main { position: relative; z-index: 1; }
+
 a { color: var(--fg); text-underline-offset: 2px; }
 a:hover { color: var(--alt); }
 
