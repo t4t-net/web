@@ -123,6 +123,10 @@ dl { display: grid; grid-template-columns: max-content 1fr; gap: 0 2ch; margin: 
 dd { margin: 0; }
 .facts dt { color: var(--alt); }
 .kv dd { color: var(--mute); }
+.qa { margin-bottom: 1.5em; }
+.qa:last-child { margin-bottom: 0; }
+.qa dt { color: var(--mute); }
+.qa .q { color: var(--fg); }
 
 pre {
   margin: 0;
