@@ -183,7 +183,7 @@ origin:     AS395388`
             made by <a href="https://catmod.ing">catmod.ing</a> &amp; luna the trans puppygirl
           </p>
           <p>
-            cats rule, bunnies drool
+            cats rule, bunnies drool. have you done your part to address the catgirl recession?
           </p>
         </footer>
       </SparkleFrame>
