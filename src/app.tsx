@@ -33,11 +33,23 @@ function useFaviconFlag(theme: string) {
 
 type Theme = 'trans' | 'lesbian' | 'bisexual' | 'nonbinary'
 const THEMES: Theme[] = ['trans', 'lesbian', 'bisexual', 'nonbinary']
+const THEME_KEY = 'theme'
+
+function loadTheme(): Theme {
+  try {
+    const t = localStorage.getItem(THEME_KEY)
+    if (THEMES.includes(t as Theme)) return t as Theme
+  } catch {}
+  return 'trans'
+}
 
 export function App() {
-  const [theme, setTheme] = useState<Theme>('trans')
+  const [theme, setTheme] = useState<Theme>(loadTheme)
   useFaviconFlag(theme)
-  useEffect(() => { document.documentElement.dataset.theme = theme }, [theme])
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    try { localStorage.setItem(THEME_KEY, theme) } catch {}
+  }, [theme])
 
   return (
     <>
