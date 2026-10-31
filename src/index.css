@@ -119,7 +119,8 @@ header {
   gap: 1rem 2.5rem;
   margin-bottom: 2.5rem;
 }
-header .flag { flex: 1 1 18rem; max-width: 28rem; }
+/* min-width: 0 lets the box shrink below the flag's own width, so it can be measured to fit */
+header .flag { flex: 1 1 18rem; max-width: 28rem; min-width: 0; }
 h1 { margin: 0 0 .5rem; font-size: 1.6rem; color: var(--fg); }
 
 h2 {

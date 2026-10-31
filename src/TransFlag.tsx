@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'preact/hooks'
+import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks'
 
 // 10 rows of 1em vs cells ~0.6em wide: 28 cols lands near the real 5:3 ratio
 const MAX_FLAG_COLS = 28
@@ -28,7 +28,8 @@ function useResponsiveCols() {
   const ref = useRef<HTMLDivElement>(null)
   const [cols, setCols] = useState(MAX_FLAG_COLS)
 
-  useEffect(() => {
+  // layout effect so the first measurement lands before paint, not one frame late
+  useLayoutEffect(() => {
     const el = ref.current
     const parent = el?.parentElement
     if (!el || !parent) return
