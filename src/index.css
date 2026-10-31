@@ -22,16 +22,13 @@ main {
   padding: 2rem 16px;
 }
 
-/* sparkle border: drawn on a canvas covering the frame, on a grid of ~1ch x 1em cells */
+/* sparkle border: four thin strip canvases around the frame, sized and placed from js */
 .frame {
   position: relative;
   padding: 2.5em 4ch;
 }
 .edge {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
   pointer-events: none;
 }
 

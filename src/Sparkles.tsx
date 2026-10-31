@@ -114,27 +114,41 @@ function look(it: Item, t: number, c: Colors): [string, string, number] {
   }
 }
 
+// the border lives on four thin strip canvases rather than one covering the whole
+// frame, which would mean redrawing millions of transparent pixels every tick
+const EDGES = ['top', 'bottom', 'left', 'right'] as const
+type Edge = typeof EDGES[number]
+const BLEED = 0.5 // cells of slack around each strip so wide/tall glyphs don't clip
+
+function edgeOf(it: Item, rows: number): Edge {
+  if (it.y === 0) return 'top'
+  if (it.y === rows + 1) return 'bottom'
+  return it.x === 0 ? 'left' : 'right'
+}
+
 export function SparkleFrame({ frameRef: ref, children }: { frameRef: RefObject<HTMLDivElement>; children: ComponentChildren }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([])
 
   useEffect(() => {
     const el = ref.current!
-    const canvas = canvasRef.current!
-    const ctx = canvas.getContext('2d')!
-    let items: Item[] = []
+    const strips = EDGES.map((edge, i) => {
+      const canvas = canvasRefs.current[i]!
+      return { edge, canvas, ctx: canvas.getContext('2d')!, x: 0, y: 0, w: 0, h: 0, items: [] as Item[] }
+    })
+    const measure = strips[0].ctx
     // '.' inks on the baseline and '·' at mid-height, so centering the em box
     // leaves single glyphs at uneven heights; nudge each one so its ink is centered
     const inkShift = new Map<string, number>()
     const shift = (g: string) => {
       let d = inkShift.get(g)
       if (d === undefined) {
-        const m = ctx.measureText(g)
+        const m = measure.measureText(g)
         d = (m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2
         inkShift.set(g, d)
       }
       return d
     }
-    let w = 0, h = 0, cellW = 9, cellH = 15, t = 0
+    let cellW = 9, cellH = 15, t = 0
 
     const draw = () => {
       const css = getComputedStyle(el)
@@ -143,37 +157,58 @@ export function SparkleFrame({ frameRef: ref, children }: { frameRef: RefObject<
         alt: css.getPropertyValue('--alt'),
         text: css.getPropertyValue('--text'),
       }
-      ctx.clearRect(0, 0, w, h)
-      for (const it of items) {
-        const [glyphs, color, alpha] = look(it, t, c)
-        ctx.globalAlpha = alpha
-        ctx.fillStyle = color
-        // trails and the mascot keep normal text layout, their ups and downs are the look
-        const dy = it.kind === 'cell' || it.kind === 'corner' ? shift(glyphs) : 0
-        ctx.fillText(glyphs, (it.x + it.w / 2) * cellW, (it.y + 0.5) * cellH + dy)
+      for (const { ctx, x, y, w, h, items } of strips) {
+        ctx.clearRect(x, y, w, h)
+        for (const it of items) {
+          const [glyphs, color, alpha] = look(it, t, c)
+          ctx.globalAlpha = alpha
+          ctx.fillStyle = color
+          // trails and the mascot keep normal text layout, their ups and downs are the look
+          const dy = it.kind === 'cell' || it.kind === 'corner' ? shift(glyphs) : 0
+          ctx.fillText(glyphs, (it.x + it.w / 2) * cellW, (it.y + 0.5) * cellH + dy)
+        }
+        ctx.globalAlpha = 1
       }
-      ctx.globalAlpha = 1
     }
 
-    const resize = (bw: number, bh: number) => {
+    const resize = (w: number, h: number) => {
       const css = getComputedStyle(el)
       const fontSize = parseFloat(css.fontSize)
+      const font = `${fontSize}px ${css.fontFamily}`
       const dpr = window.devicePixelRatio || 1
-      w = bw; h = bh
-      canvas.width = Math.round(w * dpr)
-      canvas.height = Math.round(h * dpr)
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-      ctx.font = `${fontSize}px ${css.fontFamily}`
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'middle'
+      measure.font = font
       // cells are sized off '0' then stretched so corners land flush on the edges
-      const cols = Math.max(0, Math.floor(w / ctx.measureText('0').width) - 2)
+      const cols = Math.max(0, Math.floor(w / measure.measureText('0').width) - 2)
       const rows = Math.max(0, Math.floor(h / fontSize) - 2)
       cellW = w / (cols + 2)
       cellH = h / (rows + 2)
       inkShift.clear() // the font may have changed
       // on narrow frames, space top/bottom cells at the side columns' pitch
-      items = layout(cols, rows, cols < NARROW_COLS ? cellH / cellW : 1)
+      const items = layout(cols, rows, cols < NARROW_COLS ? cellH / cellW : 1)
+
+      // strip rects in cells, before bleed: [x, y, w, h]
+      const rects: Record<Edge, number[]> = {
+        top: [0, 0, cols + 2, 1],
+        bottom: [0, rows + 1, cols + 2, 1],
+        left: [0, 1, 1, rows],
+        right: [cols + 1, 1, 1, rows],
+      }
+      for (const s of strips) {
+        const [cx, cy, cw, ch] = rects[s.edge]
+        // snap to whole device pixels so glyphs rasterize exactly like they would on one big canvas
+        const snap = (v: number) => Math.floor(v * dpr) / dpr
+        s.x = snap((cx - BLEED) * cellW); s.y = snap((cy - BLEED) * cellH)
+        s.w = snap((cx + cw + BLEED) * cellW - s.x + 1 / dpr); s.h = snap((cy + ch + BLEED) * cellH - s.y + 1 / dpr)
+        Object.assign(s.canvas.style, { left: `${s.x}px`, top: `${s.y}px`, width: `${s.w}px`, height: `${s.h}px` })
+        s.canvas.width = Math.round(s.w * dpr)
+        s.canvas.height = Math.round(s.h * dpr)
+        // shift by the strip's origin so drawing stays in frame coordinates
+        s.ctx.setTransform(dpr, 0, 0, dpr, -s.x * dpr, -s.y * dpr)
+        s.ctx.font = font
+        s.ctx.textAlign = 'center'
+        s.ctx.textBaseline = 'middle'
+        s.items = items.filter(it => edgeOf(it, rows) === s.edge)
+      }
       draw()
     }
 
@@ -195,7 +230,7 @@ export function SparkleFrame({ frameRef: ref, children }: { frameRef: RefObject<
 
   return (
     <div ref={ref} className="frame">
-      <canvas ref={canvasRef} className="edge" aria-hidden="true" />
+      {EDGES.map((edge, i) => <canvas key={edge} ref={c => { canvasRefs.current[i] = c }} className="edge" aria-hidden="true" />)}
       {children}
     </div>
   )
