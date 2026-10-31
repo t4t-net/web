@@ -96,11 +96,11 @@ export function App() {
       <SparkleFrame frameRef={frameRef}>
         <header>
           <div className="flag"><TransFlag theme={theme} /></div>
-          <div>
+          <div className="intro">
             <h1>t4t.net</h1>
             <dl className="facts">
               <dt>asn</dt><dd>AS395388</dd>
-              <dt>host</dt><dd>ghostholding.sea.t4t.net</dd>
+              <dt>host</dt><dd>ghostholding.<wbr />sea.<wbr />t4t.net</dd>
               <dt>os</dt><dd>NixOS 26.05</dd>
               <dt>where</dt><dd>KOMO Plaza, Seattle</dd>
               <dt>pronouns</dt><dd>it/its</dd>
