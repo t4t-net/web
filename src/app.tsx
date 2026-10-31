@@ -4,6 +4,7 @@ import { SparkleFrame } from './Sparkles'
 import { KaomojiRain } from './KaomojiRain'
 import { Starfield } from './Starfield'
 import { Nyan } from './Nyan'
+import { RouteSeen } from './RouteSeen'
 
 function useFaviconFlag(theme: string) {
   const colorsRef = useRef(FLAG_COLORS[theme] ?? FLAG_COLORS.trans)
@@ -138,11 +139,11 @@ export:     to AS26073 announce AS395388
 remarks:    geofeed `}<a href="https://t4t.net/geofeed.csv">https://t4t.net/geofeed.csv</a>{`
 
 route:      23.190.72.0/24
-origin:     AS395388
+origin:     AS395388`}<RouteSeen prefix="23.190.72.0/24" theme={theme} />{`
 
 route6:     2620:c2:2000::/48
-origin:     AS395388`
-          }</pre>
+origin:     AS395388`}<RouteSeen prefix="2620:c2:2000::/48" theme={theme} />
+          </pre>
         </section>
 
         <section>
