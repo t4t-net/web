@@ -24,10 +24,6 @@ const slotWidth = (s: string) => [...s].length + 2
 type Item = { kind: 'cell' | 'trail' | 'corner' | 'mascot'; id: number; x: number; y: number; w: number; text?: string }
 type Colors = { fg: string; alt: string; text: string }
 
-// below this many columns (phones), plain cells along the top and bottom are spaced
-// to match the side cells' pitch instead of 1ch, so the rows don't look bunched
-const NARROW_COLS = 56
-
 // a run of n columns along row y starting at column x0, with kaomoji star trails
 // every ~20 columns (jittered); plain cells are nominally step columns wide
 function trailLine(out: Item[], side: number, y: number, x0: number, n: number, step: number, reserveEnd = 0) {
@@ -183,8 +179,9 @@ export function SparkleFrame({ frameRef: ref, children }: { frameRef: RefObject<
       cellW = w / (cols + 2)
       cellH = h / (rows + 2)
       inkShift.clear() // the font may have changed
-      // on narrow frames, space top/bottom cells at the side columns' pitch
-      const items = layout(cols, rows, cols < NARROW_COLS ? cellH / cellW : 1)
+      // cells are ~0.6em wide but a line tall, so space top/bottom cells at the
+      // side columns' pitch instead of 1ch or the rows look twice as dense
+      const items = layout(cols, rows, cellH / cellW)
 
       // strip rects in cells, before bleed: [x, y, w, h]
       const rects: Record<Edge, number[]> = {
