@@ -79,6 +79,8 @@ function loadTheme(): Theme {
 
 export function App() {
   const [theme, setTheme] = useState<Theme>(loadTheme)
+  // shared so the starfield can keep its stars clear of the sparkle border
+  const frameRef = useRef<HTMLDivElement>(null)
   useFaviconFlag(theme)
   useEffect(() => {
     document.documentElement.dataset.theme = theme
@@ -87,11 +89,11 @@ export function App() {
 
   return (
     <>
-    <Starfield theme={theme} />
+    <Starfield theme={theme} frameRef={frameRef} />
     <KaomojiRain theme={theme} />
     <Nyan theme={theme} />
     <main>
-      <SparkleFrame>
+      <SparkleFrame frameRef={frameRef}>
         <header>
           <div className="flag"><TransFlag theme={theme} /></div>
           <div>

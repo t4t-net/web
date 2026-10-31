@@ -1,3 +1,4 @@
+import type { RefObject } from 'preact'
 import { useEffect, useRef } from 'preact/hooks'
 import { FLAG_COLORS } from './TransFlag'
 
@@ -21,10 +22,11 @@ function pickLayer() {
   return LAYERS[0]
 }
 
-function makeStar(cols: number, y: number): Star {
+// open is the list of columns stars may fall in
+function makeStar(open: number[], y: number): Star {
   const layer = pickLayer()
   return {
-    x: Math.floor(Math.random() * cols),
+    x: open[Math.floor(Math.random() * open.length)],
     y,
     layer,
     glyph: layer.glyphs[Math.floor(Math.random() * layer.glyphs.length)],
@@ -35,11 +37,11 @@ function makeStar(cols: number, y: number): Star {
   }
 }
 
-function makeStars(cols: number, rows: number): Star[] {
-  return Array.from({ length: Math.round(cols * rows * STAR_DENSITY) }, () => makeStar(cols, Math.random() * rows))
+function makeStars(open: number[], rows: number): Star[] {
+  return Array.from({ length: Math.round(open.length * rows * STAR_DENSITY) }, () => makeStar(open, Math.random() * rows))
 }
 
-export function Starfield({ theme }: { theme: string }) {
+export function Starfield({ theme, frameRef }: { theme: string; frameRef: RefObject<HTMLElement> }) {
   const ref = useRef<HTMLCanvasElement>(null)
   const colorsRef = useRef(FLAG_COLORS[theme] ?? FLAG_COLORS.trans)
   colorsRef.current = FLAG_COLORS[theme] ?? FLAG_COLORS.trans
@@ -54,7 +56,8 @@ export function Starfield({ theme }: { theme: string }) {
     const fontSize = parseFloat(css.fontSize)
     const font = `${fontSize}px ${css.fontFamily}`
     const text = css.color
-    let cw = 9, ch = 18, cols = 0, rows = 0
+    let cw = 9, ch = 18, rows = 0
+    let open: number[] = []
     let stars: Star[] = []
 
     const resize = () => {
@@ -66,9 +69,14 @@ export function Starfield({ theme }: { theme: string }) {
       ctx.textBaseline = 'top'
       cw = ctx.measureText('0').width
       ch = Math.round(fontSize * 1.2)
-      cols = Math.ceil(innerWidth / cw)
+      const cols = Math.ceil(innerWidth / cw)
       rows = Math.ceil(innerHeight / ch)
-      stars = makeStars(cols, rows)
+      // keep a one-cell moat around the sparkle border so stars never crowd it;
+      // phone gutters are thinner than a cell, so there they vanish entirely
+      const frame = frameRef.current?.getBoundingClientRect()
+      open = Array.from({ length: cols }, (_, c) => c)
+        .filter(c => !frame || (c + 1) * cw <= frame.left - cw || c * cw >= frame.right + cw)
+      stars = makeStars(open, rows)
     }
 
     const glyph = (g: string, x: number, y: number, color: string, alpha: number) => {
@@ -112,7 +120,7 @@ export function Starfield({ theme }: { theme: string }) {
         const s = stars[i]
         s.y += s.layer.speed * dt / 1000
         // once the tail clears the bottom, respawn above the top in a fresh column
-        if (s.y - s.layer.tail > rows) stars[i] = makeStar(cols, -1)
+        if (s.y - s.layer.tail > rows) stars[i] = makeStar(open, -1)
       }
       draw(now)
       raf = requestAnimationFrame(frame)

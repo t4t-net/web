@@ -1,4 +1,4 @@
-import type { ComponentChildren } from 'preact'
+import type { ComponentChildren, RefObject } from 'preact'
 import { useEffect, useRef } from 'preact/hooks'
 
 const TWINKLE = ['.', '+', '*', '✦', '*', '+']
@@ -94,8 +94,7 @@ function look(it: Item, t: number, c: Colors): [string, string, number] {
   }
 }
 
-export function SparkleFrame({ children }: { children: ComponentChildren }) {
-  const ref = useRef<HTMLDivElement>(null)
+export function SparkleFrame({ frameRef: ref, children }: { frameRef: RefObject<HTMLDivElement>; children: ComponentChildren }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
