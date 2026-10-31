@@ -63,10 +63,6 @@ that being said, if you want a @t4t.net email and you're gay and transgender... 
   {
     q: 'will you peer with my network?',
     a: `maybe! email us and let's talk about it. bonus points if you're gay and transgender!`
-  },
-  {
-    q: `why don't you work with either of the two gay and transgender hackerspaces in seattle that have ASNs?`,
-    a: `because my stalker ex is at one of them (making me effectively persona-non-grata for reasons i have not quite understood), and the other is toxic (and has questionable cybersecurity practices). no thank you!!!! good vibes only!!!!`
   }
 ]
 
